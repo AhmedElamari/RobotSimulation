@@ -10,25 +10,48 @@ public class RobotArena {
 	Random randomGenerator;
 	
 	
+	
+	
 /** creating a arena and adding robot in random position
 @param a //define arena in form of "xs ys: xr yr"
 */
-	
-	
 public RobotArena(int xMax, int yMax) {
+
 	this.xMax = xMax;
 	this.yMax = yMax;
+	robots = new ArrayList<Robot>();
 	randomGenerator = new Random();
 	
+}
+
+public RobotArena(String a) {
+	StringSplitter sp = new StringSplitter(a, " ");
+	xMax = sp.getNthInt(0, 10);
+	yMax = sp.getNthInt(1, 10);
 	robots = new ArrayList<Robot>();
+	randomGenerator = new Random();
+	int numRobots = sp.getNthInt(2, 0);
+	for (int i = 0; i < numRobots; i++) {
+		addRobot();
+	}
 }
 
 
+	
+	
+
+
+
+
+
+/**
+ * add a robot in random position
+ */
 public void addRobot() {
-    int x, y;
-    do {
-        x = randomGenerator.nextInt(xMax); // generates values from 1 to xMax - 2
-        y = randomGenerator.nextInt(yMax); // generates values from 1 to yMax - 2
+    int x, y; // x and y position of the robot
+    do { // ensure the robot is not placed on top of another robot
+        x = randomGenerator.nextInt(xMax); // random x position
+        y = randomGenerator.nextInt(yMax);  // random y position
     } while (getRoboAt(x, y) != null); // ensure no other robot is at this position
 
     Direction d = Direction.values()[randomGenerator.nextInt(Direction.values().length)]; // random direction
@@ -49,6 +72,14 @@ public String toString() {
 	}
 	
 	return "Arena Size: " + xMax + " " + yMax + "\n" + result;
+}
+
+public String fileString() {
+	String result = xMax + " " + yMax + ";";
+	for (Robot r : robots) {
+		result += r.fileString() + ";";
+	}
+	return result;
 }
 
 /**
@@ -106,6 +137,12 @@ public static void main(String[] args) {
 	a.addRobot();
 	a.addRobot();
 	System.out.println(a.toString());
+	//test fileString
+	System.out.println(a.fileString());
+	
 	
 }
+
+
+
 }

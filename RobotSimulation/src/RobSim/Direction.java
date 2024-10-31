@@ -30,13 +30,13 @@ public Direction next() {
 public String toString() {
 	switch (this) {
 	case NORTH:
-		return "North";
+		return "NORTH";
 	case EAST:
-		return "East";
+		return "EAST";
 	case SOUTH:
-		return "South";
+		return "SOUTH";
 	case WEST:
-		return "West";
+		return "WEST";
 	default:
 		throw new IllegalArgumentException();
 	}

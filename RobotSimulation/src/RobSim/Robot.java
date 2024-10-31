@@ -20,7 +20,10 @@ public class Robot {
 public void displayRobot(ConsoleCanvas c) {
 	c.showIt(x, y, 'R');
 }
-
+public String fileString() {
+	
+	return x + " " + y + " " + roboID + " " + d.toString();
+}
 /**
  * trytomove robot in the direction
  * calculate next x,y position depending on its direction
@@ -70,11 +73,14 @@ public boolean isHere(int x, int y) { // check if robot is at position x, y
 	return this.x == x && this.y == y;
 } //return true if robot ishere, else false
 
+
 public static void main(String [] args) {
     Robot r1 = new Robot(0, 0, Direction.NORTH);
     Robot r2 = new Robot(5, 3, Direction.EAST);
     System.out.println(r1.toString());
     System.out.println(r2.toString());
+    System.out.println(r1.fileString());
+    System.out.println(r2.fileString());
 }
 
 
