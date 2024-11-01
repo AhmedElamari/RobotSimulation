@@ -10,38 +10,36 @@ public class RobotArena {
 	Random randomGenerator;
 	
 	
-	
-	
 /** creating a arena and adding robot in random position
 @param a //define arena in form of "xs ys: xr yr"
+*param ramdomGenerator //random generator
 */
 public RobotArena(int xMax, int yMax) {
-
-	this.xMax = xMax;
-	this.yMax = yMax;
-	robots = new ArrayList<Robot>();
-	randomGenerator = new Random();
-	
+	this.xMax = xMax; //moves xmax to this.xmax in order to select
+	this.yMax = yMax; //moves ymax to this.ymax in order to select
+	robots = new ArrayList<Robot>(); //initialize robots array list
+	randomGenerator = new Random(); //initialize random generator
 }
 
+
+/**
+ * constructor for RobotArena
+ * 
+ * @param a //define arena in form of "xs ys: xr yr"
+ */
 public RobotArena(String a) {
-	StringSplitter sp = new StringSplitter(a, " ");
-	xMax = sp.getNthInt(0, 10);
-	yMax = sp.getNthInt(1, 10);
-	robots = new ArrayList<Robot>();
-	randomGenerator = new Random();
-	int numRobots = sp.getNthInt(2, 0);
-	for (int i = 0; i < numRobots; i++) {
-		addRobot();
+	//split the string a in format 20 6; 0 0 NORTH; 1 1 SOUTH; etc
+	StringSplitter ss = new StringSplitter(a, ";"); //split the string a using ; as delimiter
+	StringSplitter sp = new StringSplitter(ss.getNth(0, ""), " "); //split the first string in ss using space as delimiter
+	xMax = sp.getNthInt(0, 20); //set xMax to the first integer in sp
+	yMax = sp.getNthInt(1, 6); //set yMax to the second integer in sp
+	robots = new ArrayList<Robot>(); //initialize robots array list
+	for (int i = 1; i < ss.numElement(); i++) { // for each robot in the string
+		robots.add(new Robot(ss.getNth(i, ""))); // add the robot to the arena
 	}
+	randomGenerator = new Random(); //initialize random generator
+	
 }
-
-
-	
-	
-
-
-
 
 
 /**
@@ -59,65 +57,86 @@ public void addRobot() {
 }
 
 
-public void showRobots(ConsoleCanvas c) {
-	for (Robot r : robots) {
+/**
+ * add a robot in specific position
+ * 
+ * @param x // x position of robot
+ * @param y // y position of robot
+ * @param d // direction of robot
+ */
+public void showRobots(ConsoleCanvas c) { //method to show robots on the console canvas
+	for (Robot r : robots) { //for each robot in the arena
 		r.displayRobot(c);
 	}
 }
 
-public String toString() {
-	String result = "";
-	for (Robot r : robots) {
-		result += r.toString() + "\n";
+
+/**
+ * method to return the string of the arena
+ */
+public String toString() { 
+	String result = ""; //initialize result to empty string to add robots
+	for (Robot r : robots) { //for each robot in the arena
+		result += r.toString() + "\n"; //use method toString from robot class to add robot information to result and then separate with new line
 	}
 	
-	return "Arena Size: " + xMax + " " + yMax + "\n" + result;
-}
-
-public String fileString() {
-	String result = xMax + " " + yMax + ";";
-	for (Robot r : robots) {
-		result += r.fileString() + ";";
-	}
-	return result;
+	return "Arena Size: " + xMax + " " + yMax + "\n" + result; //return the result string after all robots are added and add arena size beforehand
 }
 
 /**
- * getter of robot arena size
+ * method to return the string of the file
+ */
+public String fileString() {
+	String result = xMax + " " + yMax + ";"; //moves x and y size to result string
+	for (Robot r : robots) { //for each robot in the arena
+		result += r.fileString() + ";"; //add the x and y position of robot to string in format x y; etc
+	} //repeat for all robots in the arena
+	return result; //return the result string after all robots are added
+}
+
+/**
+ * getter of robot x arena size
  */
 public int getXMax() {
 	return xMax; 
 }
 
+/**
+ * getter of robot y arena size
+ */
 public int getYMax() {
 	return yMax;
 }
+
 
 /**
  * determine whether a robot canmovehere and if so then return true otherwise return false, 
  * if robot is outside arenasize 
  * or another robot is present
+ * @param x // x position of robot
+ * @param y // y position of robot
  */
-
 public boolean canMoveHere(int x, int y) {
-	if (x < 0 || x >= xMax || y <0|| y >= yMax) {
-		return false;
+	if (x < 0 || x >= xMax || y <0|| y >= yMax) { //if robot is outside the arena
+		return false; //then return false as it can not move outside arena
 	}
-	return getRoboAt(x, y) == null;
+	return getRoboAt(x, y) == null; //robot can move if there is no other robot at that position
 }
+
+
 /**
- * move all robots in the arena
+ * method to moveAllRobots at once using trytomove function
  */
 public void moveAllRobots() {
-	for (Robot r : robots) {
-		r.tryToMove(this);
-	}
+	for (Robot r : robots) { // for each robot in the arena
+		r.tryToMove(this); //move that specific robot 
+	} //then repeat for all robots till all robots are moved
 }
 
 
 /***
  * get robot at position x, y
- * @param x
+ * @param x 
  * @param y
  * @return
  */
@@ -132,7 +151,7 @@ public Robot getRoboAt(int x, int y) {
 
 
 public static void main(String[] args) {
-	RobotArena a = new RobotArena(20, 10);
+	RobotArena a = new RobotArena(20, 12);
 	a.addRobot();
 	a.addRobot();
 	a.addRobot();
